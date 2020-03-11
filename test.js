@@ -1,4 +1,4 @@
-const pingBing = require( "index.js" ),
+const pingBing = require( "./" ),
     apiKey = "[Your API Key Here]",
     siteUrl = "[Your Bing Verified Site URL (domain)]";
 
