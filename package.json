@@ -20,7 +20,5 @@
     "url": "https://github.com/docluv/ping_bing/issues"
   },
   "homepage": "https://github.com/docluv/ping_bing#readme",
-  "dependencies": {
-    "request": "^2.88.0"
-  }
+  "dependencies": {}
 }
