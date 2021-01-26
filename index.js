@@ -99,8 +99,8 @@ exports.pingBing = function(options) {
       }
     };
 
-    const req = https
-      .request(config, res => {
+    const req = https.request(config, res => {
+
         let data = "";
 
         res.on("data", chunk => {
@@ -110,6 +110,7 @@ exports.pingBing = function(options) {
         res.on("end", () => {
           resolve(data);
         });
+
       })
       .on("error", err => {
         reject(err.message);
@@ -117,5 +118,7 @@ exports.pingBing = function(options) {
 
     req.write(body);
     req.end();
+
   });
+  
 };
