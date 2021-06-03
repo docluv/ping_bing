@@ -45,12 +45,23 @@ function cleanUrlList(urlList) {
   return urlList;
 }
 
+
+/*
+  reference - https: //docs.microsoft.com/en-us/dotnet/api/microsoft.bing.webmaster.api.interfaces.iwebmasterapi.geturlsubmissionquota?view=bing-webmaster-dotnet
+
+  options = {
+    apiKey: '[your api key],
+    siteUrl: '[your site origin https://yoursite.tld]'
+  }
+
+
+*/
 exports.getQuota = function(options){
 
  return new Promise((resolve, reject) => {
 
     if (!options.apiKey) {
-      
+
       reject(missingKey);
 
       return;
