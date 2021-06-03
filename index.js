@@ -1,7 +1,10 @@
 "use strict";
 
 const https = require("https"),
-  url = require("url");
+  host = "ssl.bing.com",
+  url = require("url"),
+  missingKey = "missing Bing API Key - https://docs.microsoft.com/en-us/bingwebmaster/getting-access",
+  missingSiteURL = "missing site URL that is verified in the Bing Webmaster Tools";
 
 function isURL(src) {
   try {
@@ -42,18 +45,71 @@ function cleanUrlList(urlList) {
   return urlList;
 }
 
-exports.pingBing = function(options) {
-  return new Promise((resolve, reject) => {
+exports.getQuota = function(options){
+
+ return new Promise((resolve, reject) => {
+
     if (!options.apiKey) {
-      reject(
-        "missing Bing API Key - https://docs.microsoft.com/en-us/bingwebmaster/getting-access"
-      );
+      
+      reject(missingKey);
 
       return;
     }
 
     if (!options.siteUrl || !isURL(options.siteUrl)) {
-      reject("missing site URL that is verified in the Bing Webmaster Tools");
+      reject(missingSiteURL);
+
+      return;
+    }
+
+    let bingURL = "/webmaster/api.svc/json/GetUrlSubmissionQuota?siteUrl=" + options.siteUrl + "&apikey=" + options.apiKey;
+
+    const config = {
+      hostname: host,
+      path: bingURL,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": 100
+      }
+    };
+
+    const req = https.request(config, res => {
+
+        let data = "";
+
+        res.on("data", chunk => {
+          data += chunk;
+        });
+
+        res.on("end", () => {
+          resolve(data);
+        });
+
+      })
+      .on("error", err => {
+        reject(err.message);
+      });
+
+    req.write(body);
+    req.end();
+
+  });
+
+};
+
+exports.pingBing = function(options) {
+
+  return new Promise((resolve, reject) => {
+    
+    if (!options.apiKey) {
+      reject(missingKey);
+
+      return;
+    }
+
+    if (!options.siteUrl || !isURL(options.siteUrl)) {
+      reject(missingSiteURL);
 
       return;
     }
@@ -90,7 +146,7 @@ exports.pingBing = function(options) {
     let body = JSON.stringify(payload);
 
     const config = {
-      hostname: "ssl.bing.com",
+      hostname: host,
       path: bingURL,
       method: "POST",
       headers: {
