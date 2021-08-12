@@ -47,7 +47,7 @@ function cleanUrlList(urlList) {
 
 
 /*
-  reference - https: //docs.microsoft.com/en-us/dotnet/api/microsoft.bing.webmaster.api.interfaces.iwebmasterapi.geturlsubmissionquota?view=bing-webmaster-dotnet
+  reference - https://docs.microsoft.com/en-us/dotnet/api/microsoft.bing.webmaster.api.interfaces.iwebmasterapi.geturlsubmissionquota?view=bing-webmaster-dotnet
 
   options = {
     apiKey: '[your api key],
