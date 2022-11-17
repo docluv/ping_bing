@@ -4,7 +4,8 @@
   "description": "Node Module to Use the Bing Adaptive URL Submission API",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start-test": "http-server public/ -p 20063 -c -i"
   },
   "repository": {
     "type": "git",

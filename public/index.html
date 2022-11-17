@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+</head>
+
+<body>
+    <header class="text-center">
+        <h1>IndexNow Submission</h1>
+    </header>
+    <div class="col-12 mh-4 d-flex justify-content-center">
+
+        <form action="" class="indexnow-form col-12 px-5 py-2">
+            <div class="form-floating col-12">
+                <input id="targetURL" class="form-control validate" autofocus required name="targetURL" type="url"
+                    tabindex="10" placeholder="URL">
+                <label for="targetURL">URL</label>
+            </div>
+
+            <div class="right-form-btn-row">
+                <button class="btn btn-success btn-submit" type="submit" name="Submit" tabindex="520">
+                    Submit
+                    <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+
+        </form>
+
+        <div class="col-12 mh-4 d-none justify-content-center text-center indexnow-success">
+            <h2>Success!!!</h2>
+        </div>
+
+        <div class="col-12 mh-4 d-none justify-content-center text-center indexnow-error">
+            <h2>Failure :(</h2>
+        </div>
+        <div class="col-12 mh-4 d-none justify-content-center text-center indexnow-missing-key">
+            <h2>Missing a Key</h2>
+        </div>
+
+    </div>
+
+    <script>
+
+        let $btnSubmit = document.querySelector(".btn-submit"),
+            $indexNowForm = document.querySelector(".indexnow-form"),
+            $indexSuccess = document.querySelector(".indexnow-success"),
+            $indexError = document.querySelector(".indexnow-error"),
+            key = location.search.replace("?key=", "");
+
+        if ($btnSubmit && key !== "" && key.length > 5) {
+
+            $btnSubmit.addEventListener("click", handleSubmitURL);
+
+        }
+
+        if (key === "" || key.length < 10) {
+
+            $indexNowForm.classList.add("d-none");
+
+            let $indexNowMissingKey = document.querySelector(".indexnow-missing-key");
+
+            $indexNowMissingKey.classList.remove("d-none");
+            $indexNowMissingKey.classList.remove("d-flex");
+
+        }
+
+        function handleSubmitURL(e) {
+
+            e.preventDefault();
+
+            $indexNowForm.classList.add("d-none");
+
+            submitURL();
+
+            return false;
+
+        }
+
+        function submitURL() {
+
+            let $targetURL = document.getElementById("targetURL");
+
+            if ($targetURL) {
+
+                let targetURL = $targetURL.value,
+                    parseURL = new URL(targetURL);
+
+                let body = JSON.stringify({
+                    "host": parseURL.host,
+                    "key": key,
+                    "keyLocation": parseURL.origin + "/" + key + ".txt",
+                    "urlList": [
+                        targetURL
+                    ]
+                });
+
+                fetch("https://jyrebebqww7ddlnj6rom66jmg40mhuqr.lambda-url.us-east-1.on.aws/", {
+                    "method": "POST",
+                    //  "mode": 'cors',
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "Content-Length": body.length
+                    },
+                    "body": body
+                })
+                    .then(response => {
+
+                        if (response.ok) {
+
+                            response.json()
+                                .then(r => {
+
+                                    if (r.statusCode === 200) {
+
+                                        $indexSuccess.classList.remove("d-none");
+                                        $indexSuccess.classList.remove("d-flex");
+
+                                    } else {
+
+                                        $indexError.classList.remove("d-none");
+                                        $indexError.classList.remove("d-flex");
+
+                                    }
+
+                                });
+
+                        }
+
+                        // response.json()
+                        //     .then(body => {
+
+                        //         console.log(body);
+
+                        //     });
+
+                    })
+                    .catch(e => {
+
+                        console.error(e);
+
+                    });
+
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>
